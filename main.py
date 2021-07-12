@@ -11,7 +11,7 @@ from model.user import User
 app = FastAPI()
 
 
-@app.post("/users", status_code=status.HTTP_201_CREATED)
+@app.post("/user", status_code=status.HTTP_201_CREATED)
 async def create_user(username: str = Form(...), email: str = Form(...), password: str = Form(...)):
     create_db_user(username, email, password)
 
