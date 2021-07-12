@@ -1,5 +1,13 @@
+deta==1.0.0
+ecdsa==0.17.0
 fastapi==0.66.0
+jose==1.0.0
+passlib==1.7.4
+pyasn1==0.4.8
 pydantic==1.8.2
+python-jose==3.3.0
+python-multipart==0.0.5
+rsa==4.7.2
 six==1.15.0
 starlette==0.14.2
 typing-extensions==3.10.0.0
