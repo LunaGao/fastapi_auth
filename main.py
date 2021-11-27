@@ -16,9 +16,9 @@ async def create_user(username: str = Form(...), email: str = Form(...), passwor
     create_db_user(username, email, password)
 
 
-@app.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
+@app.post("/oauth/token", response_model=Token)
+async def get_login_access_token(oauth_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(oauth_data.username, oauth_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -32,11 +32,19 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/users/me/", response_model=User)
-async def read_users_me(current_user: User = Depends(get_current_active_user)):
+# FIXME: this should be same as `/oauth/token`. But Fastapi's oauth module doesn't support this.
+# So I have to create another one to let user refresh token.
+@app.post("/oauth/refresh_token")
+async def refresh_token(oauth_data: OAuth2PasswordRequestForm = Depends()):
+    pass
+
+
+@app.post("/oauth/out")
+async def logout_access_token(oauth_data: OAuth2PasswordRequestForm = Depends()):
+    pass
+
+
+@app.get("/user", response_model=User)
+async def read_user_me(current_user: User = Depends(get_current_active_user)):
     return current_user
 
-
-@app.get("/users/me/items/")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.username}]
